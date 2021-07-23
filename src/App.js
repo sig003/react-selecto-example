@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import Selecto from "react-selecto";
+import "./style.css";
 
 function App() {
+  const list = [];
+
+  for (let i = 0; i < 60; ++i) {
+    list.push(i);
+  }
+  const [val, setVal] = useState([]);
+
+  useEffect(() => {
+    console.log(val)
+  },[val])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Selecto
+          dragContainer={".container"}
+          selectableTargets={[".list"]}
+          hitRate={100}
+          selectByClick={true}
+          selectFromInside={true}
+          ratio={0}
+          onSelect={e => {
+              e.added.forEach(el => {
+                  el.classList.add("selected");
+                  setVal(prev => [...prev, el.getAttribute("k")])
+              });
+              e.removed.forEach(el => {
+                  el.classList.remove("selected");
+                  setVal([])
+              });
+          }}
+        ></Selecto>
+
+      <div className="container">
+          {list.map(i => <div className="list" key={i} k={i}>{i}</div>)}
+      </div>
+    </>
   );
 }
 
